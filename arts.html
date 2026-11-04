@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arts · Yueyang Liu</title>
+<meta name="description" content="TODO: one sentence about your dance and videography.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<script>
+    // Jump bar: highlights the button for the part of the page you are reading
+    const jl=[...document.querySelectorAll('.jump a')],jo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)jl.forEach(a=>a.classList.toggle('on',a.hash==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+    jl.forEach(a=>{const t=document.querySelector(a.hash);if(t)jo.observe(t)});
+</script>
+<body class="page-dance">
+<nav class="nav"><div class="wrap">
+<a class="logo" href="index.html">Yueyang Liu<span>.</span></a>
+<button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
+<ul><li><a href="index.html">Home</a></li><li><a href="research.html">Research</a></li><li><a href="career.html">Career</a></li><li><a href="programming.html">Programming</a></li><li><a class="on" href="arts.html">Arts</a></li><li><a href="cooking.html">Cooking</a></li></ul>
+</div></nav>
+<!-- STAGE: big full-width photo. To use a short silent clip instead, swap the <img> for:
+<video src="assets/img/arts/hero.mp4" autoplay muted loop playsinline></video> -->
+<header class="stage">
+<img src="assets/img/arts/hero.jpg" alt="">
+<div class="wrap">
+<p class="eyebrow">Dance · Videography · Music</p>
+<h1>Move.<br><span>Film.</span> Teach.</h1>
+<p>Dancing and art is my way to express myself wholeheartedly. No rules.</p>
+<div class="btns"><a class="btn amber" href="#videography">Instagram</a><a class="btn alt" style="color:#fff;border-color:#fff" href="TODO">TikTok</a></div>
+</div>
+</header>
+<!-- JUMP BAR: buttons that scroll to each part of the page. Each href must match an id below. -->
+<nav class="jump" aria-label="On this page"><div class="wrap"><a href="#dance">Dance</a><a href="#videography">Videography</a><a href="#music">Music</a></div></nav>
+<div id="dance">
+<!-- GROUPS AND STYLES -->
+<section style="background:#161616"><div class="wrap twocol">
+<div>
+<p class="eyebrow">Groups</p>
+<h2>Where I dance</h2>
+<div class="timeline">
+<div class="titem"><p class="when">2 years</p><h3>DAC</h3><p>Freestyle dance group for training and performance.<br>Alumni</p></div>
+<div class="titem"><p class="when">4 years</p><h3>Freestyle Dance Society</h3><p>Freestyle dance society within UCL<br>Teacher · Former Treasurer · Former Publicity Officer</p></div>
+<div class="titem"><p class="when">2 years</p><h3>Dance Society</h3><p>Dance society within UCL focused on choreography<br>Former member</p></div>
+</div>
+</div>
+<div>
+<p class="eyebrow">Styles</p>
+<h2>What I dance</h2>
+<!-- STYLE TILES: name on top, picture or GIF below, the whole tile links to a video. Set each href, swap the image for your .jpg or .gif. -->
+<div class="styles">
+<a class="style" href="TODO: hip hop video link" target="_blank" rel="noopener"><h3>Hip hop</h3><img src="assets/img/arts/style-hiphop.gif" alt="Hip hop clip"></a>
+<a class="style" href="TODO: popping video link" target="_blank" rel="noopener"><h3>Popping</h3><img src="assets/img/arts/style-popping.gif" alt="Popping clip"></a>
+<a class="style" href="TODO: krump video link" target="_blank" rel="noopener"><h3>Krump</h3><img src="assets/img/arts/style-krump.gif" alt="Krump clip"></a>
+</div>
+<p style="margin-top:18px">Krump is my main style. I am self-taught but I also go to classes from Base Studios by Jordan Douglas aka Sapien.</p>
+</div>
+</div></section>
+<!-- PERFORMANCES -->
+<section><div class="wrap">
+<p class="eyebrow">Performance</p>
+<h2>On stage</h2>
+<div class="perf">
+<div class="card"><img src="assets/img/arts/perf-1.jpg" alt="TODO"><span class="tag" style="color:var(--b)">2026</span><h3>DAC Project · PAC 2025</h3><p class="ph">TODO: your role and what the piece was.</p></div>
+<div class="card"><img src="assets/img/arts/perf-2.jpg" alt="TODO"><span class="tag" style="color:var(--b)">2025</span><h3>UCL Blooms: Breathe</h3><p class="ph">TODO: your role and what the piece was.</p></div>
+<div class="card"><img src="assets/img/arts/perf-3.jpg" alt="TODO"><span class="tag" style="color:var(--b)">2023</span><h3>UCL Blooms: Reflection</h3><p class="ph">TODO: details.</p></div>
+</div>
+</div></section>
+<!-- BATTLES: newest first. Copy a <tr> row to add a result. -->
+<section><div class="wrap">
+<p class="eyebrow">Freestyle</p>
+<h2>Battles and achievements</h2>
+<div class="card" style="overflow-x:auto">
+<table class="results">
+<tr><th>Year</th><th>Event</th><th>Category</th><th>Result</th></tr>
+<tr><td class="ph">TODO</td><td class="ph">TODO: event name</td><td class="ph">TODO: e.g. 1v1 all styles</td><td class="place ph">TODO: e.g. Winner</td></tr>
+<tr><td class="ph">TODO</td><td class="ph">TODO</td><td class="ph">TODO</td><td class="place ph">TODO: e.g. Top 4</td></tr>
+<tr><td class="ph">TODO</td><td class="ph">TODO</td><td class="ph">TODO</td><td class="place ph">TODO</td></tr>
+</table>
+</div>
+</div></section>
+<!-- TEACHING -->
+<section style="background:#161616"><div class="wrap twocol">
+<div><p class="eyebrow">Teaching</p><h2>Classes and workshops</h2><p class="ph">TODO: where and what you teach, levels, how long, how many students.</p></div>
+<div class="card"><h3>Highlights</h3><ul><li class="ph">TODO: highlight</li><li class="ph">TODO: highlight</li><li class="ph">TODO: highlight</li></ul></div>
+</div></section>
+</div>
+<div id="videography">
+<!-- REELS: each tile links to an Instagram reel. Replace href and the cover image.
+To embed the real player instead, paste Instagram's embed code (••• on the reel → Embed) inside a <div class="reel">,
+and keep ONE <script async src="https://www.instagram.com/embed.js"></script> at the bottom of the page. -->
+<section><div class="wrap">
+<p class="eyebrow">Instagram</p>
+<h2>Videos and edits</h2>
+<div class="reels">
+<a class="reel" href="TODO: reel link" target="_blank" rel="noopener"><img src="assets/img/arts/reel-1.jpg" alt=""><span class="play">▶</span><span class="t ph">TODO: reel title</span></a>
+<a class="reel" href="TODO: reel link" target="_blank" rel="noopener"><img src="assets/img/arts/reel-2.jpg" alt=""><span class="play">▶</span><span class="t ph">TODO: reel title</span></a>
+<a class="reel" href="TODO: reel link" target="_blank" rel="noopener"><img src="assets/img/arts/reel-3.jpg" alt=""><span class="play">▶</span><span class="t ph">TODO: reel title</span></a>
+<a class="reel" href="TODO: reel link" target="_blank" rel="noopener"><img src="assets/img/arts/reel-4.jpg" alt=""><span class="play">▶</span><span class="t ph">TODO: reel title</span></a>
+</div>
+<div class="soon" style="margin-top:28px"><p class="eyebrow">TikTok</p><h3>Coming soon</h3><p class="muted">Work in progress. <a href="TODO">Follow along</a>.</p></div>
+</div></section>
+</div>
+<div id="music">
+<!-- MUSIC: song name on top, album cover below. The whole tile links to the song. Copy a whole <a> line to add a song. -->
+<section><div class="wrap">
+<p class="eyebrow">Music</p>
+<h2>Creations from sudden inspiration</h2>
+<div class="music">
+<a class="track" href="TODO: song link" target="_blank" rel="noopener"><h3>Serenade</h3><img src="assets/img/arts/cover-1.png" alt="TODO: album name"></a>
+<a class="track" href="TODO: song link" target="_blank" rel="noopener"><h3>Constant=Tired</h3><img src="assets/img/arts/cover-2.png" alt="TODO: album name"></a>
+<!-- <a class="track" href="TODO: song link" target="_blank" rel="noopener"><h3 class="ph">TODO: song name</h3><img src="assets/img/music/cover-3.jpg" alt="TODO: album name"></a>
+<a class="track" href="TODO: song link" target="_blank" rel="noopener"><h3 class="ph">TODO: song name</h3><img src="assets/img/music/cover-4.jpg" alt="TODO: album name"></a> -->
+</div>
+</div></section>
+</div>
+<footer><div class="wrap">
+<div><b>Yueyang (Luka) Liu</b><br><a href="mailto:arts@yueyangliu.com">arts@yueyangliu.com</a></div>
+<ul><li><a href="TODO">LinkedIn</a></li><li><a href="TODO">GitHub</a></li><li><a href="TODO">Instagram</a></li><li><a href="TODO">TikTok</a></li></ul>
+<small>© <span class="year"></span> Yueyang Liu</small>
+</div></footer>
+<script src="js/main.js"></script>
+</body>
+</html>

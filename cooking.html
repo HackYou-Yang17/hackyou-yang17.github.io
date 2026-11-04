@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cooking · Yueyang Liu</title>
+<meta name="description" content="TODO: one sentence about your cooking.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<!-- Flip book styles live here, not in style.css, so this page works by replacing this one file. -->
+<style>
+.menu a.dish{color:inherit;text-decoration:none;cursor:pointer}
+.menu a.dish:hover b{color:var(--a)}
+.menu .pg{font-family:"Caveat",cursive;font-size:1.25rem;color:var(--b-dark)}
+.book-wrap{max-width:980px;margin:0 auto}
+.book{position:relative;width:100%;aspect-ratio:3/2;perspective:2600px}
+.book-inner{position:absolute;inset:0;transition:transform .8s ease}
+.book[data-state=closed] .book-inner{transform:translateX(-25%)}
+.book[data-state=end] .book-inner{transform:translateX(25%)}
+.leaf{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform .8s ease}
+.leaf.turned{transform:rotateY(-180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;overflow:hidden}
+.face.live{pointer-events:auto}
+.face.back{transform:rotateY(180deg)}
+.page{width:100%;height:100%;background:#FFFDF8;padding:5% 6% 3%;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.face.front .page{border-radius:0 6px 6px 0;background-image:linear-gradient(to right,rgba(0,0,0,.09),transparent 7%)}
+.face.back .page{border-radius:6px 0 0 6px;background-image:linear-gradient(to left,rgba(0,0,0,.09),transparent 7%)}
+.page h3{font-family:"Caveat",cursive;font-weight:500;font-size:1.7rem;color:var(--a);text-align:center;margin-bottom:3%}
+.dishes{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4%;min-height:0}
+.pno{text-align:center;font-family:"Playfair Display",serif;font-style:italic;color:var(--g4);font-size:.9rem;margin-top:2%}
+.dc{display:grid;min-height:0;border:0;background:none;padding:0;cursor:pointer;font:inherit;color:var(--ink);text-align:center;transform-style:preserve-3d;transition:transform .6s ease;transform:perspective(900px) rotate(-1.2deg) rotateY(0)}
+.dc:nth-child(even){transform:perspective(900px) rotate(1.2deg) rotateY(0)}
+.dc.text{transform:perspective(900px) rotate(-1.2deg) rotateY(180deg)}
+.dc:nth-child(even).text{transform:perspective(900px) rotate(1.2deg) rotateY(180deg)}
+.dc>span{grid-area:1/1;display:flex;flex-direction:column;min-height:0;padding:5%;background:var(--white);box-shadow:0 3px 10px rgba(0,0,0,.12);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.dc-front img{flex:1;min-height:0;width:100%;object-fit:cover}
+.dc-front b{font-family:"Caveat",cursive;font-weight:500;font-size:1.25rem;margin-top:4%;line-height:1.1}
+.dc>.dc-back{transform:rotateY(180deg);justify-content:center;gap:6px;background:var(--b-soft);font-size:.82rem;line-height:1.45;overflow:auto}
+.dc-back b{font-family:"Playfair Display",serif;font-size:1.05rem}
+.dc-back i{font-size:.72rem;color:var(--g6)}
+.cover .page{background:var(--a);background-image:none;color:var(--white);justify-content:center;align-items:center;text-align:center;border-left:14px solid var(--b)}
+.face.back.cover .page,.backcover .page{border-left:0;border-right:14px solid var(--b)}
+.cover h2{font-family:"Playfair Display",serif;font-style:italic;color:var(--white);font-size:clamp(1.8rem,4vw,2.8rem)}
+.cover p{color:#D3E6E4;margin:10px 0 24px}
+.corner{position:absolute;bottom:0;width:44px;height:44px;border:0;cursor:pointer;background:linear-gradient(135deg,transparent 50%,#E9E2D3 50%);z-index:2}
+.face.front .corner{right:0}
+.face.back .corner{left:0;transform:scaleX(-1)}
+.corner:hover{width:56px;height:56px}
+.book-nav{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:22px}
+.book-nav button{border:2px solid var(--a);background:var(--white);color:var(--a);border-radius:999px;padding:8px 18px;font:600 .95rem var(--font);cursor:pointer}
+.book-nav button:disabled{opacity:.35;cursor:default}
+.book-nav span{min-width:120px;text-align:center;color:var(--g6);font-size:.9rem}
+.hint{text-align:center;color:var(--g6);font-size:.9rem;margin-top:10px}
+/* Phones: pages stack instead of flipping, because a two-page spread is too small to read */
+.book.stack{aspect-ratio:auto;perspective:none}
+.book.stack .book-inner{position:static;transform:none;display:grid;gap:24px}
+.book.stack .page{aspect-ratio:3/4;border-radius:6px;background-image:none}
+.book.stack .cover,.book.stack .backcover,.book.stack~.book-nav{display:none}
+@media(prefers-reduced-motion:reduce){.leaf,.book-inner,.dc{transition:none}}
+</style>
+</head>
+<body class="page-cooking">
+<nav class="nav"><div class="wrap">
+<a class="logo" href="index.html">Yueyang Liu<span>.</span></a>
+<button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
+<ul><li><a href="index.html">Home</a></li><li><a href="research.html">Research</a></li><li><a href="career.html">Career</a></li><li><a href="programming.html">Programming</a></li><li><a href="arts.html">Arts</a></li><li><a class="on" href="cooking.html">Cooking</a></li></ul>
+</div></nav>
+<header class="phead"><div class="wrap">
+<p class="eyebrow">From my mind palace</p>
+<h1>Luka's Kitchen</h1>
+<p>I want to eat good food, so why not make it myself?</p>
+</div></header>
+<!-- MENU: your favourite dishes. data-goto="1" opens the book at page 1. Use "—" and a <div> for dishes not in the book. -->
+<section><div class="wrap">
+<div class="menu">
+<p class="eyebrow" style="text-align:center">Tonight's menu</p>
+<h2>The Flavour-ites</h2>
+<div class="course"><h3>Starters</h3>
+<a class="dish" href="#book" data-goto="1"><b class="ph">TODO: dish</b><span class="dots"></span><span class="pg">p. 1</span></a><small class="ph">TODO: a short description</small>
+<a class="dish" href="#book" data-goto="1"><b class="ph">TODO: dish</b><span class="dots"></span><span class="pg">p. 1</span></a><small class="ph">TODO: description</small>
+</div>
+<div class="course"><h3>Mains</h3>
+<a class="dish" href="#book" data-goto="2"><b class="ph">TODO: favourite dish</b><span class="dots"></span><span class="pg">p. 2</span></a><small class="ph">TODO: description</small>
+<a class="dish" href="#book" data-goto="2"><b class="ph">TODO: dish</b><span class="dots"></span><span class="pg">p. 2</span></a><small class="ph">TODO: description</small>
+</div>
+<div class="course"><h3>Desserts</h3>
+<div class="dish"><b class="ph">TODO: dish</b><span class="dots"></span><span class="pg">—</span></div><small class="ph">TODO: description</small>
+</div>
+</div>
+</div></section>
+<!-- FLIP BOOK. Pages go in reading order: cover, page 1, page 2, ... , back cover.
+To add pages: copy a whole <div class="page"> block (with its 4 dishes) and paste it before the back cover. Add them in pairs so each spread is full.
+Each dish: put the photo in src, the name twice (front and back), and the description on the back. -->
+<section style="background:var(--white)"><div class="wrap">
+<p class="eyebrow">Portfolio</p>
+<h2>Things I've made</h2>
+<div class="book-wrap" id="book">
+<div class="book" data-state="closed"><div class="book-inner">
+<div class="page cover"><h2>My Cookbook</h2><p>Dishes I have made so far</p><button class="btn amber" type="button" data-open>Open the book</button></div>
+<div class="page">
+<h3 class="ph">TODO: page title, e.g. Comfort food</h3>
+<div class="dishes">
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-1.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: 2–3 lines — what it is, where it comes from, why you love it.</span><i>tap to see the photo</i></span></button>
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-2.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-3.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-4.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+</div></div>
+<div class="page">
+<h3 class="ph">TODO: page title, e.g. Weekend projects</h3>
+<div class="dishes">
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-5.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-6.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-7.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+<button class="dc" type="button"><span class="dc-front"><img src="assets/img/cooking/dish-8.jpg" alt=""><b class="ph">TODO: dish name</b></span><span class="dc-back"><b class="ph">TODO: dish name</b><span class="ph">TODO: description</span><i>tap to see the photo</i></span></button>
+</div></div>
+<div class="page cover backcover"><h2>More to come</h2><p>New dishes get added as I cook them.</p></div>
+</div></div>
+<div class="book-nav"><button type="button" data-prev>‹ Previous</button><span data-status>Cover</span><button type="button" data-next>Next ›</button></div>
+<p class="hint">Tap a photo to read about the dish. Turn pages with the arrows, the page corners or your arrow keys.</p>
+</div>
+</div></section>
+<!-- IDEAS: a notebook page of things to try -->
+<section><div class="wrap" style="max-width:860px">
+<p class="eyebrow">Scribbles</p>
+<h2>Ideas to try</h2>
+<ul class="notebook"><li class="ph">TODO: idea</li><li class="ph">TODO: idea</li><li class="ph">TODO: idea</li><li class="ph">TODO: idea</li></ul>
+</div></section>
+<footer><div class="wrap">
+<div><b>Yueyang (Luka) Liu</b><br><a href="mailto:arts@yueyangliu.com">arts@yueyangliu.com</a></div>
+<ul><li><a href="TODO">LinkedIn</a></li><li><a href="TODO">GitHub</a></li><li><a href="TODO">Instagram</a></li><li><a href="TODO">TikTok</a></li></ul></ul>
+<small>© <span class="year"></span> Yueyang Liu</small>
+</div></footer>
+<script src="js/main.js"></script>
+<script>
+// Flip book. Pages are paired into leaves (front + back). "cur" = how many leaves are turned.
+(()=>{
+const book=document.querySelector('.book'),inner=book.querySelector('.book-inner'),pages=[...inner.children];
+const prev=document.querySelector('[data-prev]'),next=document.querySelector('[data-next]'),status=document.querySelector('[data-status]');
+const hint=document.querySelector('.hint');
+const content=pages.filter(p=>!p.classList.contains('cover'));
+content.forEach((p,i)=>{const n=document.createElement('div');n.className='pno';n.textContent=i+1;p.appendChild(n)});
+let leaves=[],cur=0,wide=null;
+function build(){
+const w=innerWidth>=760;if(w===wide)return;wide=w;
+inner.innerHTML='';leaves=[];book.classList.toggle('stack',!w);hint.textContent=w?'Tap a photo to read about the dish. Turn pages with the arrows, the page corners or your arrow keys.':'Tap a photo to read about the dish.';
+if(!w){pages.forEach(p=>inner.appendChild(p));book.dataset.state='open';return}
+for(let i=0;i<pages.length;i+=2){
+const leaf=document.createElement('div');leaf.className='leaf';
+[pages[i],pages[i+1]].forEach((p,k)=>{const f=document.createElement('div');f.className='face '+(k?'back':'front');
+if(!p){p=document.createElement('div');p.className='page'}
+if(p.classList.contains('cover'))f.classList.add('cover');
+f.appendChild(p);
+const c=document.createElement('button');c.type='button';c.className='corner';c.setAttribute('aria-label',k?'Previous page':'Next page');c.onclick=()=>turn(k?-1:1);f.appendChild(c);
+leaf.appendChild(f)});
+inner.appendChild(leaf);leaves.push(leaf)}
+render()}
+function render(){
+const L=leaves.length;
+leaves.forEach((l,i)=>{l.classList.toggle('turned',i<cur);if(!l.dataset.moving)l.style.zIndex=i<cur?i+1:L-i;l.querySelectorAll('.face').forEach(f=>f.classList.remove('live'))});
+if(cur>0)leaves[cur-1].querySelector('.back').classList.add('live');
+if(cur<L)leaves[cur].querySelector('.front').classList.add('live');
+book.dataset.state=cur===0?'closed':cur===L?'end':'open';
+prev.disabled=cur===0;next.disabled=cur===L;
+const left=2*cur-1,right=2*cur;
+status.textContent=cur===0?'Cover':cur===L?'Back cover':'Pages '+[left,right].filter(n=>n>=1&&n<=content.length).join('–')+' of '+content.length}
+function turn(d){
+if(!wide)return;const to=cur+d;if(to<0||to>leaves.length)return;
+const m=leaves[d>0?cur:cur-1];m.dataset.moving=1;m.style.zIndex=999;cur=to;render();
+clearTimeout(m._t);m._t=setTimeout(()=>{delete m.dataset.moving;render()},820)}
+function goTo(p){
+if(!wide){content[p-1].scrollIntoView({behavior:'smooth',block:'center'});return}
+const want=p%2?(p+1)/2:p/2;
+const step=()=>{if(cur===want)return;turn(want>cur?1:-1);setTimeout(step,300)};step()}
+prev.onclick=()=>turn(-1);next.onclick=()=>turn(1);
+document.querySelector('[data-open]').onclick=()=>turn(1);
+document.addEventListener('keydown',e=>{if(!wide)return;const r=book.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;if(e.key==='ArrowRight')turn(1);if(e.key==='ArrowLeft')turn(-1)});
+document.querySelectorAll('[data-goto]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.getElementById('book').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>goTo(+a.dataset.goto),500)}));
+// Dish cards: click swaps photo and description with a quick card-turn
+document.querySelectorAll('.dc').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('text')));
+build();addEventListener('resize',build);
+})();
+</script>
+</body>
+</html>
