@@ -15,3 +15,7 @@ openHash();window.addEventListener('hashchange',openHash);
 document.querySelectorAll('[data-slider]').forEach(sl=>{const tr=sl.querySelector('.slides'),n=tr.children.length,ct=sl.querySelector('.slider-count'),[pv,nx]=sl.querySelectorAll('[data-step]');
 const at=()=>Math.round(tr.scrollLeft/(tr.clientWidth+16)),upd=()=>{const i=at();ct.textContent=(i+1)+' / '+n;pv.disabled=i===0;nx.disabled=i===n-1};
 sl.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>tr.scrollTo({left:(at()+ +b.dataset.step)*(tr.clientWidth+16)})));tr.addEventListener('scroll',upd);upd()});
+// Hover-to-play: stills swap to GIFs (data-gif) and videos play (data-hover-play) while the mouse is over the tile. Phones have no hover, so they just play.
+const canHover=matchMedia('(hover:hover)').matches;
+document.querySelectorAll('img[data-gif]').forEach(img=>{const still=img.getAttribute('src'),gif=img.dataset.gif;new Image().src=gif;if(!canHover){img.src=gif;return}const t=img.closest('a')||img;t.addEventListener('mouseenter',()=>img.src=gif);t.addEventListener('mouseleave',()=>img.src=still)});
+document.querySelectorAll('video[data-hover-play]').forEach(v=>{if(!canHover){v.autoplay=true;v.play().catch(()=>{});return}const t=v.closest('a')||v;t.addEventListener('mouseenter',()=>v.play().catch(()=>{}));t.addEventListener('mouseleave',()=>v.pause())});
