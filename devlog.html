@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Devlog · Yueyang Liu</title>
+<meta name="description" content="Development log for my 2D Unity game — what I built, what broke, and what I learned.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<!-- Devlog styles live here, not in style.css, so this page works as one file. -->
+<style>
+.dl{display:grid;grid-template-columns:200px 1fr;gap:56px;padding-top:56px;padding-bottom:56px}
+.dl-side{position:sticky;top:96px;align-self:start}
+.dl-side p{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g6);margin-bottom:8px}
+.dl-side a{display:block;padding:6px 0 6px 14px;border-left:2px solid var(--g2);color:var(--g6);font-size:.9rem}
+.dl-side a:hover{border-color:var(--b);color:var(--ink);text-decoration:none}
+.post{padding-bottom:48px;margin-bottom:48px;border-bottom:1px solid var(--g2)}
+.post:last-child{border:0}
+.post .when{font-family:"JetBrains Mono",monospace;font-size:.85rem;color:var(--b-dark);margin-bottom:6px}
+.post h2{margin-bottom:12px}
+.post .chips{margin-bottom:18px}
+.post figure{margin:20px 0}
+.post figure img,.post figure video{border-radius:var(--r);border:1px solid var(--g2);width:100%;cursor:zoom-in}
+.post figcaption{font-size:.9rem;color:var(--g6);margin-top:8px}
+.post h3{margin-top:22px}
+.post ul{margin-top:8px}
+.post li{margin-bottom:4px}
+@media(max-width:820px){.dl{grid-template-columns:1fr;gap:0}.dl-side{display:none}}
+</style>
+</head>
+<body class="page-programming">
+<nav class="nav"><div class="wrap">
+<a class="logo" href="index.html">Yueyang Liu<span>.</span></a>
+<button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
+<ul><li><a href="index.html">Home</a></li><li><a href="research.html">Research</a></li><li><a href="career.html">Career</a></li><li><a class="on" href="programming.html">Programming</a></li><li><a href="arts.html">Arts</a></li><li><a href="cooking.html">Cooking</a></li></ul>
+</div></nav>
+<header class="phead"><div class="wrap">
+<p class="eyebrow">Game · Unity · C# · Devlog</p>
+<h1>devlog</h1>
+<p>A 2D city-builder and mass battler in Unity, where you capture enemies instead of killing them. This log tracks what I build, what breaks, and why I made each choice.</p>
+<div class="btns"><a class="btn amber" href="programming.html#game">Back to the game</a></div>
+</div></header>
+<div class="wrap dl">
+<!-- SIDE LIST: one link per post, newest first. Each href matches a post's id. Hidden on phones. -->
+<aside class="dl-side"><p>Entries</p><a href="#entry-4">Battles end, the map begins</a><a href="#entry-3">Squads, orders and data</a><a href="#entry-2">Coloured squares and capture</a><a href="#entry-1">Starting out</a></aside>
+<main>
+<!-- POSTS: newest at the top. To add one, copy a whole <article> block, paste it at the top, give it the next id, and add a matching link to the side list. -->
+<article class="post" id="entry-4">
+<p class="when">31 Oct 2026</p>
+<h2>Battles end, the map begins</h2>
+<ul class="chips"><li>Battle flow</li><li>Camera</li><li>Crowd AI</li><li>World map</li></ul>
+<p>Battles can now finish properly. A fight ends in a win when the last enemy goes down, a loss when my hero goes down, or a retreat when the hero holds the edge of the field for two seconds. The result is applied to my army, prisoners are kept or released, and the game returns to where the fight started.</p>
+<p>I also added a command zoom: hold Space and the camera snaps out to exactly twice the view, so I can give orders to squads I can't otherwise see. It snaps instead of sliding because pixel art only stays sharp at whole-number zoom levels. The army now starts in lines by squad, with squad 1 at the front.</p>
+<figure><img src="assets/img/programming/game.gif" alt="A battle between coloured-square armies with the command zoom" loading="lazy" data-zoom><figcaption>Holding Space to zoom out. Individual squad selection and different commands like charge, follow, and retreat.</figcaption></figure>
+<h3>What went wrong</h3>
+<p>Charging units froze when they were boxed in by friends standing on Hold, because they waited forever for someone who was never going to move. Now they walk through friends who are only standing, step sideways around friends who are fighting, and queue behind the hero when following. Units also jittered while moving, which turned out to be a camera timing setting rather than the movement code.</p>
+<h3>Next</h3>
+<ul><li>Play the world map for the first time: the code is written, but nothing on it has been tested yet</li><li>Build the post-battle screen for deciding what happens to prisoners</li></ul>
+</article>
+<article class="post" id="entry-3">
+<p class="when">Oct 2026</p>
+<h2>Squads, orders and data</h2>
+<ul class="chips"><li>Squads</li><li>Orders</li><li>Data</li></ul>
+<p>The army is split into up to four squads, picked with the number keys. Each squad takes one of four orders: follow me, hold position, charge, or retreat. An order sets a goal, not a behaviour, so in a mixed squad an archer and a spearman both "charge" in their own way. Selected squads get an outline, and an arrow at the screen edge points to any squad that is off-screen.</p>
+<p>Every unit type now lives in a data file instead of in code: humans from beggar to genius, goblins and demons, each with a tier. Both armies are spawned from these lists, so a new unit is a new file, not new code.</p>
+<h3>Next</h3>
+<ul><li>A proper 20 v 20 fight — the biggest so far is about 10 v 5</li></ul>
+</article>
+<article class="post" id="entry-2">
+<p class="when">Sep 2026</p>
+<h2>Coloured squares and capture</h2>
+<ul class="chips"><li>Combat</li><li>Capture</li><li>Setup</li></ul>
+<p>I set one rule before writing any code: no art until the gameplay works. Every unit is a plain 32 × 32 coloured square, because squares answer "is this fun?" just as well as finished sprites, and every frame drawn before the mechanics settle would be redrawn later.</p>
+<p>The player and every other unit share the same combat parts — health, team, and an attack built from a list of steps, so a combo is just a longer list. That is how being a hero and commanding an army stay one system instead of two. Knocking an enemy out captures it automatically, but it stays hostile until persuaded, and stronger units are much harder to persuade.</p>
+<figure><img src="assets/img/programming/game-2.gif" alt="Coloured squares fighting, with a downed enemy turning grey" loading="lazy" data-zoom><figcaption>Downing and capturing an enemy. Downed enemies are grey while dead enemies are red.</figcaption></figure>
+</article>
+<article class="post" id="entry-1">
+<p class="when">Sep 2026</p>
+<h2>Starting out</h2>
+<ul class="chips"><li>Design</li></ul>
+<p>The idea: a 2D game where you are both a fighter on the battlefield and the commander of your army, and where you grow by capturing enemies rather than killing them. It borrows specific pieces from games I love — capturing and promoting units from Mount &amp; Blade: Bannerlord, building freedom from Clash of Clans, capture-and-keep from Zombie Cafe — with the world inspired by <i>That Time I Got Reincarnated as a Slime</i> and The World of Kung Fu: Dragon and Eagle.</p>
+<p>Before building, I wrote down the big decisions and the reason for each: about 20 units a side so the hero still matters, a camera that stays on the hero, and orders shouted to a few squads instead of an RTS control scheme.</p>
+</article>
+</main>
+</div>
+<footer><div class="wrap">
+<div><b>Yueyang (Luka) Liu</b><br><a href="mailto:work@yueyangliu.com">work@yueyangliu.com</a></div>
+<ul><li><a href="https://www.linkedin.com/in/yueyang-liu/">LinkedIn</a></li><li><a href="https://github.com/HackYou-Yang17">GitHub</a></li><li><a href="https://www.instagram.com/lukay_lyy/">Instagram</a></li><li><a href="arts.html#tiktok">TikTok</a></li></ul>
+<small>© <span class="year"></span> Yueyang Liu</small>
+</div></footer>
+<script src="js/main.js"></script>
+</body>
+</html>

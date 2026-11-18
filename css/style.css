@@ -225,3 +225,12 @@ table.results{width:100%;border-collapse:collapse;font-size:.95rem}
 .slider-count{font-size:.9rem;color:var(--g6);min-width:3.5em;text-align:center}
 .slides img{background:#fff}
 .lightbox img{background:#fff;padding:12px}
+details.titem{border:0;border-radius:0;padding:0 0 28px;background:none}
+details.titem+details.titem{margin-top:0}
+details.titem summary{font-weight:inherit;font-family:inherit;font-size:inherit}
+details.titem summary::after{content:"+ details";float:none;display:inline-block;margin-top:4px;font-family:var(--font);font-size:.85rem;font-weight:600;color:var(--a)}
+details.titem[open] summary::after{content:"– hide"}
+details.titem summary:hover h3{color:var(--a)}
+details.titem[open] summary{margin-bottom:8px}
+details.titem>p{color:var(--g6);margin-top:6px}
+.page-research main{min-width:0}
